@@ -1,13 +1,13 @@
-## Excercise 1
-
+from nltk.corpus import inaugural, brown,stopwords
+from urllib import request
+from nltk import ConditionalFreqDist
+	
 def calculateWordCounts(text):
-    # Write your code here
     print(len(text))
     print(len(set(text)))
     print(int(len(text)/(len(set(text)))))
 	
 def filterWords(text):
-    # Write your code here
     ing_words = [word for word in set(text) if word.endswith("ing")]
     large_words = [word for word in text if len(word) > 15 ]
     upper_words = [word for word in set(text) if word.isupper()]
@@ -15,17 +15,13 @@ def filterWords(text):
     return ing_words, large_words, upper_words
 	
 def findWordFreq(text, word):
-    # Write your code here
     textfreq = nltk.FreqDist([word for word in text if word.isalpha()])
     wordfreq = textfreq[word]
     maxfreq = textfreq.most_common(1)[0][0]
     
     return wordfreq, maxfreq
 
-## Excercise 2
 def accessTextCorpora(fileid, word):
-    # Write your code here
-    from nltk.corpus import inaugural
     n_words = len(inaugural.words(fileid))
     n_unique_words = len(set(inaugural.words(fileid)))
     wordcoverage = int(n_words/n_unique_words)
@@ -37,7 +33,6 @@ def accessTextCorpora(fileid, word):
     return wordcoverage, ed_words, wordfreq
 	
 def createUserTextCorpora(filecontent1, filecontent2):
-    # Write your code here
     with open(r'nltk_data/content1.txt', 'w') as f:
         f.write(filecontent1)
         
@@ -56,17 +51,8 @@ def createUserTextCorpora(filecontent1, filecontent2):
     
     return text_corpus, no_of_words_corpus1, no_of_unique_words_corpus1, no_of_words_corpus2, no_of_unique_words_corpus2
 	
-	
-#### Excercise - 3
-
-cfd = nltk.ConditionalFreqDist([ 
-(genre, word) 
-for genre in reuters.categories() 
-for word in reuters.words(categories=genre) ])
 
 def calculateCFD(cfdconditions, cfdevents):
-    # Write your code here
-    from nltk.corpus import brown,stopwords
     stopword = set(stopwords.words('english'))
     cdev_cfd = nltk.ConditionalFreqDist([(genre, word.lower()) for genre in cfdconditions for word in brown.words(categories=genre) if not word.lower()  in stopword])
     cdev_cfd.tabulate(conditions = cfdconditions, samples = cfdevents)
@@ -83,11 +69,8 @@ def calculateCFD(cfdconditions, cfdevents):
     #print(inged_cfd.conditions())    
     inged_cfd.tabulate(conditions=cfdconditions, samples = ['ed','ing'])
 	
-#### Excercise - 4
 
 def processRawText(textURL):
-    # Write your code here
-    from urllib import request
     textcontent = request.urlopen(textURL).read()
     decoded = textcontent.decode('unicode_escape') 
     tokenizedlcwords = [word.lower() for word in nltk.word_tokenize(decoded)]
@@ -100,14 +83,8 @@ def processRawText(textURL):
     
     return noofwords, noofunqwords, wordcov, maxfreq
 	
-#### Excercise - 5
-
-
-
 def performBigramsAndCollocations(textcontent, word):
-    # Write your code here
-    from nltk.corpus import stopwords
-    from nltk import ConditionalFreqDist
+
     tokenizedword = nltk.regexp_tokenize(textcontent, pattern = r'\w*', gaps = False)
     tokenizedwords = [x.lower() for x in tokenizedword if x != '']
     tokenizedwordsbigrams=nltk.bigrams(tokenizedwords)
@@ -120,26 +97,16 @@ def performBigramsAndCollocations(textcontent, word):
 
     return mostfrequentwordafter ,collocationwords
 	
-	
-#### Excercise - 6
-
 def performStemAndLemma(textcontent):
-    from nltk.corpus import stopwords
-    # Write your code here
-    #Step 1
     tokenizedword = nltk.regexp_tokenize(textcontent, pattern = r'\w*', gaps = False)
-    #Step 2
     tokenizedwords = [y for y in tokenizedword if y != '']
     unique_tokenizedwords = set(tokenizedwords)
     tokenizedwords = [x.lower() for x in unique_tokenizedwords if x != '']
-    #Step 3
-    #unique_tokenizedwords = set(tokenizedwords)
     stop_words = set(stopwords.words('english')) 
     filteredwords = []
     for x in tokenizedwords:
         if x not in stop_words:
             filteredwords.append(x)
-    #Steps 4, 5 , 6
     ps = nltk.stem.PorterStemmer()
     ls = nltk.stem.LancasterStemmer()
     wnl = nltk.stem.WordNetLemmatizer()
@@ -153,8 +120,6 @@ def performStemAndLemma(textcontent):
     return porterstemmedwords, lancasterstemmedwords, lemmatizedwords
 
 
-#### Excercise - 7	
-
 def tagPOS(textcontent, taggedtextcontent, defined_tags):
     # Write your code here
     words = nltk.word_tokenize(textcontent)
@@ -166,7 +131,4 @@ def tagPOS(textcontent, taggedtextcontent, defined_tags):
     unigram_pos_tag = tagger.tag(words)
     
     return nltk_pos_tags, tagged_pos_tag, unigram_pos_tag
-
-##### Excercise - 8
-
 
